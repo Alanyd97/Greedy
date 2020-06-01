@@ -2,7 +2,7 @@
 import java.util.Arrays;
 
 /* Una familia, con su cantidad de dias, y una arreglo con el top de 4 dias preferidos */
-public class Familia {
+public class Familia implements  Comparable<Familia>{
 
 	private int id;
 	private int miembros;
@@ -27,7 +27,9 @@ public class Familia {
 	public void setPreferido() {
 		if (preferido + 1 <= diasPreferidos.length -1)
 			this.preferido++;
-		else System.out.println("se fue del array");
+		else {
+			preferido=0;
+		}
 	}
 
 	public void setId(int id) {
@@ -52,7 +54,7 @@ public class Familia {
 	}
 	
 	/* Retorna el dia preferido de la familia */
-	public int diaPreferido() {
+	public int diaPreferido(){
 		return preferenciaEn(preferido);
 	}
 	
@@ -70,4 +72,8 @@ public class Familia {
 		return "Familia: id=" + id + ", miembros=" + miembros + ", preferencias=" + Arrays.toString(diasPreferidos);
 	}
 
+	@Override
+	public int compareTo(Familia o) {
+		return Integer.compare(o.miembros(), this.miembros());
+	}
 }

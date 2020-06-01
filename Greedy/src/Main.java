@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class Main {
@@ -8,11 +9,14 @@ public class Main {
 	static Dia[]  arDias = new Dia[100];
 	public static void main(String... args) {
 		CSVReader reader = new CSVReader("./data/familias.csv");
-		
 		ArrayList<Familia> familias = reader.read();
+		Collections.sort(familias);
+		for (Familia fam : familias) {
+			System.out.println(fam);
+		}
 		inicializarArreglo();
-		Greedy g = new Greedy(familias);
-		g.agregarFamilias();
+		Greedy g = new Greedy();
+		g.agregarFamilias(familias.iterator());
 	}
 
 	private static void inicializarArreglo(){
@@ -22,53 +26,54 @@ public class Main {
 	}
 
 	private static class Greedy{
-		private Iterator<Familia> iFamilias;
-		private ArrayList<Familia> sinDesignar;
 		private ArrayList<Familia> sinDesignarAux;
+		private int designados;
 
 		private int bono;
-		public Greedy(ArrayList<Familia> a){
-			iFamilias = a.iterator();
-			sinDesignar = new ArrayList<Familia>();
+		public Greedy(){
 			sinDesignarAux = new ArrayList<Familia>();
 			bono = 0;
+			designados = 0;
 		}
 
 		public int bono(){ return this.bono();}
-		public void agregarFamilias(){
-			Iterator<Familia> aux = iFamilias;
-			if (solucion()){
-				while (aux.hasNext()){
-					Familia a = aux.next();
-					System.out.println(a+"  pref: "+a.diaPreferido());
+
+		public void agregarFamilias(Iterator<Familia> iFamilias){
+			ArrayList<Familia> sinDesignar = new ArrayList<Familia>();
+			if (solucion(iFamilias)){
+				while (iFamilias.hasNext()){
+					Familia a = iFamilias.next();
+					if (a.getId() == 4846){
+						System.out.println("pref de: "+ (a.diaPreferido()-1));
+					}
 					if (!arDias[a.diaPreferido()-1].addFamilia(a)){
 						a.setPreferido();
 						sinDesignar.add(a);
+					}else{
+						designados++;
 					}
 				}
-				if(sinDesignarAux.size() == 0){
-					sinDesignarAux.addAll(sinDesignar);
-				}
-				iFamilias = sinDesignar.iterator();
-				sinDesignar.removeAll(sinDesignar);
-				//debug(sinDesignar);
-				agregarFamilias();
+				System.out.println("Designados: "+designados);
+				debug(sinDesignar);
+				agregarFamilias(sinDesignar.iterator());
 			}
+			int totalFam = 0;
+			int cantFam = 0;
 			for (Dia a : arDias){
-				System.out.println("Sin design :"+a);
+				totalFam = totalFam + a.getCantFamilias();
 			}
-
+			System.out.println("Total de familias: "+ totalFam);
 			calcularBono(sinDesignarAux);
 		}
 
 		private void calcularBono(ArrayList<Familia> a){
-			System.out.println("asd");
 			for (Familia b: a){
 				bono =  bono + 25 + (10 * b.miembros()) + (5 * b.getDesignado());
 			}
 			System.out.println("bono: "+bono);
 		}
-		private boolean solucion(){
+
+		private boolean solucion(Iterator<Familia> iFamilias){
 			return iFamilias.hasNext();
 
 		}
@@ -76,11 +81,22 @@ public class Main {
 		private void debug(ArrayList<Familia> a){
 			BufferedReader entrada = new BufferedReader(new InputStreamReader(System.in));
 			try{
-				for (Familia f: a
-					 ) {
-					System.out.println(f.getId()+"  pref:"+f.diaPreferido());
+				System.out.println("sin designar: "+a.size());
+				char z = entrada.readLine().charAt(0);
+				if (z >= 'z'){
+					System.out.println(a.get(1));
+					System.out.println("Indice: "+a.get(1).getPreferido());
+					System.out.println(arDias[4].getCapacidadActual());
+					System.out.println(arDias[46].getCapacidadActual());
+					System.out.println(arDias[32].getCapacidadActual());
+					System.out.println(arDias[25].getCapacidadActual());
+					System.out.println(arDias[11].getCapacidadActual());
+					System.out.println(arDias[59].getCapacidadActual());
+					System.out.println(arDias[65].getCapacidadActual());
+					System.out.println(arDias[0].getCapacidadActual());
+					arDias[4].getCapacidadActual();
+					arDias[11].getCapacidadActual();
 				}
-				String z = entrada.readLine();
 			}catch (Exception e){
 				System.out.println(e);
 			}
