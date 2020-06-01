@@ -5,15 +5,13 @@ public class Dia {
     private ArrayList<Familia> familias;
     private final static int capacidad = 340;
     private int capacidadActual;
-    private int totalFamilias;
     private int cantFamilias;
-    private int id;
+    private int bono;
 
-    public Dia(int a){
+    public Dia(){
         familias = new ArrayList<>();
-        id=a;
+        bono=0;
         capacidadActual = capacidad;
-        totalFamilias = 0;
         cantFamilias = 0;
     }
 
@@ -25,22 +23,23 @@ public class Dia {
         this.capacidadActual = capacidadActual;
     }
 
-    public boolean addFamilia(Familia f){
+    public void addFamilia(Familia f){
         if (capacidadActual(f.miembros())){
-            totalFamilias = totalFamilias + f.miembros();
             cantFamilias++;
             familias.add(f);
             f.setDesignado(f.diaPreferido());
+            if (f.getIndiceDesignado() != 0){
+                bono = bono + 25 +(10*f.miembros()) + (5 *f.getIndiceDesignado() );
+            }
             setCapacidadActual(getCapacidadActual() - f.miembros());
-            return true;
         }else{
-            return false;
+            System.out.println("ERROR BROOOO");
         }
     }
 
-    public int getCantFamilias(){return cantFamilias;}
+    public int getBono() {return this.bono;}
 
-    public int getTotalFamilias(){return totalFamilias;}
+    public int getCantFamilias(){return cantFamilias;}
 
     public boolean capacidadActual(int cap){
         return capacidadActual >= cap;

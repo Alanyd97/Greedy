@@ -9,18 +9,39 @@ public class Familia implements  Comparable<Familia>{
 	private int[] diasPreferidos;
 	private int preferido=0;
 	private int designado;
-
+	private int indiceDesignado;
 	public Familia(int id, int miembros, int... diasPreferidos) {
 		this.id = id;
 		this.miembros = miembros;
 		this.diasPreferidos = diasPreferidos;
+		this.indiceDesignado = 0;
 	}
 
 	public int getDesignado(){
 		return designado;
 	}
 
-	public void setDesignado(int a){ designado = a;}
+	public void setDesignado(int a){
+		designado = a;
+		if (preferenciaEn(0) == designado){
+			setIndiceDesignado(0);
+		}else{
+			for (int i = 0; i < diasPreferidos.length; i++) {
+				if (preferenciaEn(i) == designado){
+					setIndiceDesignado(i);
+					break;
+				}
+			}
+		}
+	}
+
+	public int getIndiceDesignado() {
+		return this.indiceDesignado;
+	}
+
+	public void setIndiceDesignado(int index){
+		this.indiceDesignado = index;
+	}
 
 	public int getPreferido() { return preferido; }
 
@@ -28,7 +49,7 @@ public class Familia implements  Comparable<Familia>{
 		if (preferido + 1 <= diasPreferidos.length -1)
 			this.preferido++;
 		else {
-			preferido=0;
+			preferido=-1;
 		}
 	}
 
