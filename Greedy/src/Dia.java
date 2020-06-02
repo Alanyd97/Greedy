@@ -7,12 +7,14 @@ public class Dia {
     private int capacidadActual;
     private int cantFamilias;
     private int bono;
+    private int cantMiembros;
 
     public Dia(){
         familias = new ArrayList<>();
         bono=0;
         capacidadActual = capacidad;
         cantFamilias = 0;
+        cantMiembros = 0;
     }
 
     public int getCapacidadActual() {
@@ -25,6 +27,7 @@ public class Dia {
 
     public void addFamilia(Familia f){
         if (capacidadActual(f.miembros())){
+            cantMiembros = cantMiembros + f.miembros();
             cantFamilias++;
             familias.add(f);
             f.setDesignado(f.diaPreferido());
@@ -32,8 +35,6 @@ public class Dia {
                 bono = bono + 25 +(10*f.miembros()) + (5 *f.getIndiceDesignado() );
             }
             setCapacidadActual(getCapacidadActual() - f.miembros());
-        }else{
-            System.out.println("ERROR BROOOO");
         }
     }
 
@@ -46,6 +47,6 @@ public class Dia {
     }
     @Override
     public String toString() {
-        return "Capacidad=" + capacidadActual + ", cant fam=" + familias.size();
+        return "Capacidad=" + capacidadActual + ", cant fam=" + this.cantMiembros;
     }
 }
