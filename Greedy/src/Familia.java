@@ -2,32 +2,55 @@
 import java.util.Arrays;
 
 /* Una familia, con su cantidad de dias, y una arreglo con el top de 4 dias preferidos */
-public class Familia {
+public class Familia implements  Comparable<Familia>{
 
 	private int id;
 	private int miembros;
 	private int[] diasPreferidos;
 	private int preferido=0;
 	private int designado;
-
+	private int indiceDesignado;
 	public Familia(int id, int miembros, int... diasPreferidos) {
 		this.id = id;
 		this.miembros = miembros;
 		this.diasPreferidos = diasPreferidos;
+		this.indiceDesignado = 0;
 	}
 
 	public int getDesignado(){
 		return designado;
 	}
 
-	public void setDesignado(int a){ designado = a;}
+	public void setDesignado(int a){
+		designado = a;
+		if (preferenciaEn(0) == designado){
+			setIndiceDesignado(0);
+		}else{
+			for (int i = 0; i < diasPreferidos.length; i++) {
+				if (preferenciaEn(i) == designado){
+					setIndiceDesignado(i);
+					break;
+				}
+			}
+		}
+	}
+
+	public int getIndiceDesignado() {
+		return this.indiceDesignado;
+	}
+
+	public void setIndiceDesignado(int index){
+		this.indiceDesignado = index;
+	}
 
 	public int getPreferido() { return preferido; }
 
 	public void setPreferido() {
 		if (preferido + 1 <= diasPreferidos.length -1)
 			this.preferido++;
-		else System.out.println("se fue del array");
+		else {
+			preferido=-1;
+		}
 	}
 
 	public void setId(int id) {
@@ -50,9 +73,18 @@ public class Familia {
 	public int preferenciaEn(int indice) {
 		return this.diasPreferidos[indice];
 	}
+
+	public boolean contiene(int i){
+		for (int j = 0; j < 5; j++) {
+			if (diasPreferidos[j] == i){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/* Retorna el dia preferido de la familia */
-	public int diaPreferido() {
+	public int diaPreferido(){
 		return preferenciaEn(preferido);
 	}
 	
@@ -70,4 +102,8 @@ public class Familia {
 		return "Familia: id=" + id + ", miembros=" + miembros + ", preferencias=" + Arrays.toString(diasPreferidos);
 	}
 
+	@Override
+	public int compareTo(Familia o) {
+		return Integer.compare( this.miembros(), o.miembros());
+	}
 }

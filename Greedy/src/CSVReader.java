@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /* Le das el path al .csv y te devuelve el arreglo de familias */
@@ -18,10 +19,10 @@ public class CSVReader {
 	
 	public ArrayList<Familia> read() {
 		ArrayList<Familia> families = new ArrayList<Familia>();
-		
 		ArrayList<String> lines = this.readContent();
 		for (String line: lines)
 			families.add(this.parseLine(line));
+		Collections.sort(families);
 		return families;
 	}
 	
